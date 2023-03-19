@@ -35,7 +35,7 @@ export const LoginScreen =() => {
     const emailChange = (email) => setEmail(email);
     const passwordChange = (password) => setPassword(password);
 
-    const onLogin = () => {
+    const onSignIn = () => {
         if (!email.trim() || !password.trim()) {
           Alert.alert(`Fields must be completed!`);
           return;
@@ -96,7 +96,7 @@ return (
                     </TouchableOpacity> 
                     </View>
                       
-                    <TouchableOpacity activeOpacity={0.6} style={styles.btn} onPress={onLogin}>
+                    <TouchableOpacity activeOpacity={0.6} style={styles.btn} onPress={onSignIn}>
                         <Text style={{...styles.btnTitle, fontFamily:"RobotoRegular",}} >Sign In</Text>
                     </TouchableOpacity>
                     <TouchableOpacity>
