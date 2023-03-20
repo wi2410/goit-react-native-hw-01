@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useCallback} from "react";
 import {StyleSheet, Text, View, TextInput, ImageBackground, TouchableOpacity, 
-    KeyboardAvoidingView, Platform, Keyboard, TouchableWithoutFeedback, Alert} from "react-native";
+    KeyboardAvoidingView, Platform, Keyboard, TouchableWithoutFeedback, Alert, Dimensions} from "react-native";
 
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
@@ -18,7 +18,20 @@ export const LoginScreen =() => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [hiddenPassword, setHiddenPassword] = useState(true)
+    const [hiddenPassword, setHiddenPassword] = useState(true);
+
+    const [dimensions, setDimensions] = useState(Dimensions.get('window').width - 16 * 2)
+
+    useEffect(()=>{
+        const onChange = () => {
+            const width = Dimensions.get('window').width - 16 * 2;
+            
+            setDimensions(width);
+        }
+        const subscription = Dimensions.addEventListener("change", onChange);
+
+        return () => subscription.remove();
+    },[])
 
     const onFocusEmail =() => {
         setFocusEmail(true);
@@ -74,7 +87,11 @@ return (
         <ImageBackground style={styles.imageBackground} source={require('./../assets/images/PhotoBG.jpg')}>
                 <View style={styles.form}>
                     <Text style={{...styles.text, fontFamily: "RobotoBold"}}>Login</Text>
-                    <TextInput style={{...styles.input, fontFamily:"RobotoRegular", borderColor: focusEmail ? "#FF6C00" : "#E8E8E8"}} 
+                    <TextInput style={{...styles.input, 
+                                        fontFamily:"RobotoRegular", 
+                                        borderColor: focusEmail ? "#FF6C00" : "#E8E8E8",
+                                        width: dimensions,
+                                    }} 
                         onFocus={onFocusEmail} onBlur={()=> setFocusEmail(false)}
                         placeholder="Email address" placeholderTextColor={"#BDBDBD"}
                         value={email}
@@ -82,8 +99,12 @@ return (
                         keyboardType="email-address"
                     />
                     <View>
-                        <TextInput style={{...styles.input, marginTop: 16, fontFamily:"RobotoRegular",
-                        borderColor: focusPassword ? "#FF6C00" : "#E8E8E8"}} 
+                        <TextInput style={{...styles.input, 
+                                    marginTop: 16, 
+                                    fontFamily:"RobotoRegular",
+                                    borderColor: focusPassword ? "#FF6C00" : "#E8E8E8",
+                                    width: dimensions,
+                                }} 
                         secureTextEntry={hiddenPassword}
                         onFocus={onFocusPassword} onBlur={()=> setFocusPassword(false)}
                         placeholder="Password" 
@@ -96,7 +117,7 @@ return (
                     </TouchableOpacity> 
                     </View>
                       
-                    <TouchableOpacity activeOpacity={0.6} style={styles.btn} onPress={onSignIn}>
+                    <TouchableOpacity activeOpacity={0.6} style={{...styles.btn, width: dimensions}} onPress={onSignIn}>
                         <Text style={{...styles.btnTitle, fontFamily:"RobotoRegular",}} >Sign In</Text>
                     </TouchableOpacity>
                     <TouchableOpacity>
@@ -128,12 +149,14 @@ const styles = StyleSheet.create({
         flex: 1,
         resizeMode: "cover",
         justifyContent: "flex-end",
+        
     },
     form:{
         // flex: 1,
         backgroundColor:"#FFFFFF",
         borderTopLeftRadius: 25,
         borderTopRightRadius: 25,
+        alignItems: "center"
         // paddingBottom: 144,
         // marginBottom: 100,
     },
@@ -141,7 +164,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 8,
         height: 50,
-        marginHorizontal: 16,
+        // marginHorizontal: 16,
         paddingHorizontal: 16,
         paddingTop: 16,
         paddingBottom: 15,
@@ -156,7 +179,7 @@ const styles = StyleSheet.create({
         justifyContent:"center",
         alignItems:"center",
         borderRadius: 100,
-        marginHorizontal: 16,
+        // marginHorizontal: 16,
         
     },
     btnTitle:{
